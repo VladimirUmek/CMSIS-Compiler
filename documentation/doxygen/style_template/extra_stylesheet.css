@@ -1,4 +1,4 @@
-/* The standard CSS for doxygen 1.9.6*/
+/* CMSIS branding overrides for the Doxygen 1.18.0 stylesheet. */
 :root {
   --arm_light_blue: #00C1DE;
   --arm_blue: #11809F;
@@ -70,13 +70,13 @@ html {
 	
 	--icon-background-color: #728DC1;
 	--icon-foreground-color: white;
-	--icon-doc-image: url('doc.svg');
 	
 	/* brief member declaration list */
 	--memdecl-background-color:#F9FAFC;
 	--memdecl-separator-color: #DEE4F0;
 	--memdecl-foreground-color: var(--page-foreground-color);
 	--memdecl-template-color: #4665A2;
+	--memdecl-border-color:var(--page-background-color);
 	
 	/* detailed member list */
 	--memdef-border-color: var(--arm_dark_gray);
@@ -147,8 +147,6 @@ html {
 	/** search field */
 	--search-background-color: white;
 	--search-foreground-color: #909090;
-	--search-magnification-image: url('mag.svg');
-	--search-magnification-select-image: url('mag_sel.svg');
 	--search-active-color: black;
 	--search-filter-background-color: #F9FAFC;
 	--search-filter-foreground-color: black;
@@ -247,13 +245,13 @@ html.dark-mode {
 	
 	--icon-background-color: #334975;
 	--icon-foreground-color: #C4CFE5;
-	--icon-doc-image: url('docd.svg');
 	
 	/* brief member declaration list */
 	--memdecl-background-color:var(--page-background-color);
 	--memdecl-separator-color: #2C3F65;
 	--memdecl-foreground-color:var(--page-foreground-color);
 	--memdecl-template-color: #7C95C6;
+	--memdecl-border-color:var(--page-background-color);
 	
 	/* detailed member list */
 	--memdef-border-color: var(--arm_dark_gray);
@@ -324,8 +322,6 @@ html.dark-mode {
 	/** search field */
 	--search-background-color: black;
 	--search-foreground-color: #C5C5C5;
-	--search-magnification-image: url('mag_d.svg');
-	--search-magnification-select-image: url('mag_seld.svg');
 	--search-active-color: #C5C5C5;
 	--search-filter-background-color: #101826;
 	--search-filter-foreground-color: #90A5CE;
@@ -515,7 +511,7 @@ body, table, div, p, dl {
     cursor: pointer;
     font-size: 100%;
     width: 16px;
-    height: 22px;
+    height: 14px;
     display: inline-block;
 }
 
@@ -745,6 +741,10 @@ div.contents {
 	font-weight: bold;
 }
 
+.memberdecls tr[class^='memitem'] {
+	font-family: var(--font-family-normal);
+}
+
 div.contents, div.header .headertitle, div.header .summary {
     max-width: var(--max_content_width);
 }
@@ -789,6 +789,10 @@ h2, h2.groupheader {
 	margin-bottom: 0.25em;
 }
 
+h2.groupheader {
+	box-shadow: none;
+}
+
 h3 {
 	font-size: 100%;
 	margin-top: 1.25em;
@@ -824,7 +828,7 @@ div.qindex, div.navtab{
 	text-align: center;
 }
 
-div.qindex, div.navpath {
+div.qindex, div#nav-path {
 	width: 100%;
 	line-height: 140%;
 }
@@ -975,11 +979,28 @@ img.footer {
 }
 
 .memSeparator {
+	border-bottom: 1px solid transparent;
 	line-height: 22px;
 }
 
-.memItemLeft, .memItemRight, .memTemplParams {
-	border-top: 1px solid var(--arm_light_gray);/*#C3CFE6;*/
+.memItemRight {
+	border-top: 1px solid var(--arm_light_gray);
+	border-bottom: 1px solid transparent;
+}
+
+.memTemplParams {
+	border-top: 1px solid var(--arm_light_gray);
+}
+
+.mdescRight {
+  padding-top: 0px;
+  padding-right: 0px;
+  padding-bottom: 26px; /*4px original padding + 22px old separator row */
+  padding-left: 0px;
+}
+
+table.memberdecls tr[class^='memitem']:not(:has(+ tr[class^='memdesc'])) td {
+  padding-bottom: 24px; /*2px original padding + 22px old separator row */
 }
 
 a:-webkit-any-link {
@@ -1010,12 +1031,13 @@ a:-webkit-any-link {
 	margin-bottom: -1px;
 	background-color: var(--memdef-title-background-color);
 	line-height: 1.25;
+	font-family: var(--font-family-normal);
+	font-size: 120%;
 	font-weight: 600;
 	float: none;
 }
 
-.permalink
-{   
+.permalink {
 	color: var(--arm_blue);
     font-size: 100%;
     display: inline-block;
@@ -1059,7 +1081,9 @@ a:-webkit-any-link {
 }
 
 .memname {
+    font-family: var(--font-family-normal);
     font-weight: bold;
+		font-size: 16px;
     margin-left: 6px;
 }
 
@@ -1390,20 +1414,20 @@ th.markdownTableHeadLeft, th.markdownTableHeadRight, th.markdownTableHeadCenter,
 	font-size: 13px;
 }
 
-.navpath ul
+#nav-path ul
 {
 	font-size: 11px;
 	background-color:var(--arm_black);
 	height:30px;
 	line-height:30px;
 	color:white;
-	border:solid 1px #C1CDE5;
+	border:solid 1px var(--arm_dark_gray);
 	overflow:hidden;
 	margin:0px;
 	padding:0px;
 }
 
-.navpath li
+#nav-path li.navelem
 {
 	list-style-type:none;
 	float:left;
@@ -1412,7 +1436,7 @@ th.markdownTableHeadLeft, th.markdownTableHeadRight, th.markdownTableHeadCenter,
 	color:#344D7E;
 }
 
-.navpath li.navelem a
+#nav-path li.navelem a
 {
 	height:32px;
 	display:block;
@@ -1420,12 +1444,12 @@ th.markdownTableHeadLeft, th.markdownTableHeadRight, th.markdownTableHeadCenter,
 	outline: none;
 }
 
-.navpath li.navelem a:hover
+#nav-path li.navelem a:hover
 {
 	color:#6583BF;
 }
 
-.navpath li.footer
+#nav-path li.footer
 {
         list-style-type:none;
         float:right;
@@ -1558,6 +1582,7 @@ dl.section dd {
 
 #projectlogo
 {
+	padding: 1.5em;
 	text-align: center;
 	vertical-align: middle;
 	border-collapse: separate;
@@ -1566,6 +1591,13 @@ dl.section dd {
 #projectlogo img
 {
 	border: 0px none;
+}
+
+#projectalign
+{
+	padding-left: 1em;
+	padding-top: 1em;
+	padding-bottom: 1em;
 }
 
 #projectname
@@ -1589,6 +1621,7 @@ dl.section dd {
 {
 	font: 50% "Lato Lite", Lato, Caibri, sans-serif;
 	margin: 0px;
+	margin-left: 0.5em;
 	color: white;
 	padding: 0px;
 }
