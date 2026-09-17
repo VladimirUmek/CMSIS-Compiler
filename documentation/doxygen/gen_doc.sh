@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Version: 3.0
-# Date: 2023-11-06
+# Version: 3.1
+# Date: 2026-09-17
 # This bash script generates CMSIS-Compiler documentation
 #
 # Pre-requisites:
 # - bash shell (for Windows: install git for Windows)
-# - doxygen 1.13.2
+# - doxygen 1.18.0
 # - linkchecker (can be skipped with -s)
 
 set -o pipefail
@@ -17,7 +17,7 @@ REQUIRED_GEN_PACK_LIB="0.13.0"
 
 DIRNAME=$(dirname "$(readlink -f "$0")")
 GENDIR=../html
-REQ_DXY_VERSION="1.13.2"
+REQ_DXY_VERSION="1.18.0"
 
 RUN_LINKCHECKER=1
 COMPONENTS=()
@@ -86,11 +86,6 @@ git_changelog -f html -p "v" > src/history.txt
 
 echo "\"${UTILITY_DOXYGEN}\" compiler.dxy"
 "${UTILITY_DOXYGEN}" compiler.dxy
-
-mkdir -p "${DIRNAME}/${GENDIR}/search/"
-cp -f "${DIRNAME}/style_template/search.css" "${DIRNAME}/${GENDIR}/search/"
-cp -f "${DIRNAME}/style_template/navtree.js" "${DIRNAME}/${GENDIR}/"
-cp -f "${DIRNAME}/style_template/resize.js" "${DIRNAME}/${GENDIR}/"
 
 sed -e "s/{datetime}/${datetime}/" "${DIRNAME}/style_template/footer.js.in" \
   | sed -e "s/{year}/${year}/" \
