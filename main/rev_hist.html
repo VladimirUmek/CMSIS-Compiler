@@ -121,6 +121,44 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('rev_hist.html'
 <tr>
 <th>Version</th><th>Description</th></tr>
 <tr>
+<td>v2.3.0</td><td>Changes since CMSIS-Compiler 2.2.0:<ul>
+<li>Add components that enable stdio retarget to SEGGER RTT</li>
+<li>Correct reference to external driver in standard stream to CMSIS USART retarget</li>
+<li>Update example project</li>
+<li>CLANG:<ul>
+<li>add standard I/O stream support for LLVM-libc </li>
+</ul>
+</li>
+</ul>
+</td></tr>
+<tr>
+<td>v2.2.0</td><td><p class="starttd">Changes since CMSIS-Compiler 2.1.0:</p>
+<ul>
+<li>Add components that enable stdio retarget to UART</li>
+<li>Update example project AC6:</li>
+<li>correct _sys_read return value when rt_fs_read returns with error</li>
+<li>correct _mutex_initialize to check whether RTOS2 kernel is initialized IAR:</li>
+<li>add support for multithreading</li>
+<li>add support for file redirection </li>
+</ul>
+</td></tr>
+<tr>
+<td>v2.1.0</td><td><ul>
+<li>AC6: correct _sys_open handling for OPEN_A, file is created if non-existent (#50)</li>
+<li>GCC: add missing forward declarations for retargeted functions (#51, #53)</li>
+<li>Add Cortex-M52 support</li>
+<li>GCC: Disable heap limit check in _sbrk_r implementation (#54) </li>
+</ul>
+</td></tr>
+<tr>
+<td>v2.0.0</td><td><ul>
+<li>Added initial support for LLVM/Clang and IAR Compiler</li>
+<li>Introduce STDERR, STDIN, STDOUT APIs and components Attention: This change conflicts with user implementations version 1.0.0!</li>
+<li>Rename RTE component defines from RTE_Compiler_* to RTE_CMSIS_Compiler_*</li>
+<li>OS Interface, Arm Compiler: Remove C library thread space implementation </li>
+</ul>
+</td></tr>
+<tr>
 <td>v1.0.0</td><td>Initial release replacing I/O Retarget from Keil.ARM-Compiler pack. </td></tr>
 </table>
 </div></div><!-- contents -->
