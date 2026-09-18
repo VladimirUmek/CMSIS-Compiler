@@ -1,6 +1,5 @@
 
-/* in Doxygen 1.9.2 'tabs' is assigned to second navigation row (navrow1) with
- 'Main Page', 'Namespaces', etc */
+/* CMSIS component tabs and Doxygen navigation tabs. */
 
 .tabs, .tabs1, .tabs2, .tabs3, .main-nav {
     background-color: var(--arm_light_gray);
@@ -17,8 +16,8 @@
     font-size: 16px;
 }
 
-.tabs1  a {
-    color:while;
+.tabs1 a {
+    color: white;
 }
 
 .tabs {
