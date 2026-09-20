@@ -1,15 +1,17 @@
 /*
- * Make an expandable navigation-tree label behave like its arrow: clicking
- * either control expands or collapses the node. Doxygen normally makes a
- * linked label navigate immediately, even when the node has children.
+ * Make an expandable navigation-tree label open its node before following
+ * the label link. The arrow retains Doxygen's expand/collapse behavior, while
+ * the label expands a closed branch and retains normal link navigation.
  *
- * The listener runs in the capture phase so it can replace Doxygen's label
- * click handler before that handler navigates. Leaf labels and modified
- * clicks retain their normal link behavior.
+ * The listener runs in the capture phase so expansion occurs before
+ * Doxygen's label handler navigates. Leaf labels and modified clicks retain
+ * their normal link behavior.
  *
  * Unlike the default Doxygen initialization, the documentation landing page
  * explicitly opens the project root and its first child (normally
- * "Overview"), making the first section list visible immediately.
+ * "Overview"), making the first section list visible immediately. On every
+ * page, an expandable selected item is also opened after Doxygen synchronizes
+ * the navigation tree with the current URL.
  */
 (function () {
   "use strict";
@@ -56,29 +58,55 @@
     return true;
   }
 
+  function expandSelectedItem() {
+    const selectedItem = document.querySelector("#nav-tree .item.selected");
+    if (!selectedItem) {
+      return false;
+    }
+
+    // Leaf items require no action. For expandable items, expandItem() opens
+    // the branch only when it is currently closed.
+    expandItem(selectedItem);
+    return true;
+  }
+
   document.addEventListener("DOMContentLoaded", function () {
-    if (!isIndexPage()) {
-      return;
-    }
-
-    // Doxygen constructs the navigation tree after DOMContentLoaded and may
-    // load parts of it asynchronously. Observe the tree until its first
-    // branch exists, expand it once, and then stop observing.
     const navTreeContents = document.getElementById("nav-tree-contents");
-    if (!navTreeContents || expandFirstBranch()) {
+    if (!navTreeContents) {
       return;
     }
 
-    const observer = new MutationObserver(function () {
-      if (expandFirstBranch()) {
-        observer.disconnect();
-      }
-    });
-    observer.observe(navTreeContents, { childList: true, subtree: true });
+    if (isIndexPage() && !expandFirstBranch()) {
+      // Doxygen constructs the navigation tree after DOMContentLoaded and may
+      // load parts of it asynchronously. Observe the tree until its first
+      // branch exists, expand it once, and then stop observing.
+      const firstBranchObserver = new MutationObserver(function () {
+        if (expandFirstBranch()) {
+          firstBranchObserver.disconnect();
+        }
+      });
+      firstBranchObserver.observe(navTreeContents, { childList: true, subtree: true });
+    }
+
+    if (!expandSelectedItem()) {
+      // Selection is applied after nodes are created. Watch child additions
+      // and class changes until the selected item is available.
+      const selectedItemObserver = new MutationObserver(function () {
+        if (expandSelectedItem()) {
+          selectedItemObserver.disconnect();
+        }
+      });
+      selectedItemObserver.observe(navTreeContents, {
+        attributes: true,
+        attributeFilter: ["class"],
+        childList: true,
+        subtree: true
+      });
+    }
   });
 
   document.addEventListener("click", function (event) {
-    // Only replace an ordinary primary-button click. This preserves actions
+    // Only augment an ordinary primary-button click. This preserves actions
     // such as Ctrl+click and Shift+click for opening or navigating links.
     if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) {
       return;
@@ -94,18 +122,15 @@
       return;
     }
 
-    // Expandable items have a direct child link containing the arrow. A leaf
-    // item has no such link and therefore continues to navigate normally.
+    // A leaf item has no expansion control and therefore continues to
+    // navigate normally.
     const item = label.closest(".item");
-    const expandToggle = item ? item.querySelector(":scope > a") : null;
-    if (!expandToggle || !expandToggle.querySelector(".arrow")) {
+    if (!item || !item.querySelector(":scope > a > .arrow")) {
       return;
     }
 
-    // Suppress the label link and delegate to Doxygen's existing toggle so
-    // its animation, arrow state, and lazy child loading remain unchanged.
-    event.preventDefault();
-    event.stopPropagation();
-    expandToggle.click();
+    // Open the branch only when it is closed. Do not cancel the label event:
+    // Doxygen must still process it and follow the target link.
+    expandItem(item);
   }, true);
 }());

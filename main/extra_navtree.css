@@ -69,6 +69,14 @@
   line-height: 30px;
 }
 
+#nav-tree .label a:hover {
+  background: none;
+}
+
+#nav-tree .label a:hover > span {
+  background: linear-gradient(to bottom, transparent 0, transparent calc(100% - 1px), currentColor 100%);
+}
+
 #nav-tree .selected a {
   color: var(--nav-text-normal-color);
   font-weight: bold;
@@ -165,4 +173,3 @@
   #nav-tree { display: none; }
   div.ui-resizable-handle { display: none; position: relative; }
 }
-
