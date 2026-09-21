@@ -3,5 +3,5 @@ function writeHeader() {
 };
 
 function writeFooter()  {
-    document.write('Generated on Sun Sep 20 2026 08:54:57 for CMSIS-Compiler Support 2.3.1-dev4+g47a5410. Copyright &copy; 2026 Arm Limited (or its affiliates). All rights reserved.');
+    document.write('Generated on Mon Sep 21 2026 07:21:31 for CMSIS-Compiler Support 2.3.1-dev4+g6376531. Copyright &copy; 2026 Arm Limited (or its affiliates). All rights reserved.');
 };
